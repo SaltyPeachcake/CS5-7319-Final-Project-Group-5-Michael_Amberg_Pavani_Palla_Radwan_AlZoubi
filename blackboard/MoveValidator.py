@@ -2,12 +2,16 @@ class MoveValidator:
     def __init__(self, blackboard):
         self.blackboard = blackboard
 
-    def is_move_valid(self, column, row):
-        # Check if the column or row is within the valid range
+    def is_move_valid(self, column):
+        # Check if the column is within the valid range
         if column < 0 or column >= len(self.blackboard.board[0]):
             return False
-        if row < 0 or row >= len(self.blackboard.board[1]):
-            return False
-        # Check if the position is 0 and thus open
-        return self.blackboard.board[row][column] == 0
+
+        # Check if there is any open position in the column
+        for row in range(len(self.blackboard.board) - 1, -1, -1):  # Start from the bottom row
+            if self.blackboard.board[row][column] == 0:
+                return True  # Found an open position
+
+        return False  # No open positions in this column
+
 

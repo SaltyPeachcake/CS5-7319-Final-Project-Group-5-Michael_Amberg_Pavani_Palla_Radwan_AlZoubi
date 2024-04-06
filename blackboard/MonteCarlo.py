@@ -21,10 +21,11 @@ class MonteCarlo:
             if not available_moves:
                 return 0  # Draw
             move = random.choice(available_moves)
-            row, col = self.simulate_move(board, move, player)
-            if row is None:  # If the column was full, try another move
+            move_result = self.simulate_move(board, move, player)
+            if move_result is None:  # If the column was full, try another move
                 available_moves.remove(move)
                 continue
+            row, col = move_result
             if self.check_winner(board, row, col, player):  # Check if this move wins the game
                 return player
             player = 3 - player  # Switch player
@@ -34,19 +35,39 @@ class MonteCarlo:
         original_player = self.blackboard.current_player
         move_wins = [0] * 7  # Track wins for each column
 
-        for move in range(7):
-            if self.blackboard.is_valid_move(move):
-                for _ in range(self.simulations_per_move):
-                    board_copy = copy.deepcopy(self.blackboard.board)
-                    self.simulate_move(board_copy, move, original_player)
-                    winner = self.simulate_random_playouts(board_copy, 3 - original_player)
-                    if winner == original_player:
-                        move_wins[move] += 1
+        available_moves = [c for c in range(7) if self.blackboard.board[0][c] == 0]
+
+        for move in available_moves:
+            for _ in range(self.simulations_per_move):
+                board_copy = copy.deepcopy(self.blackboard.board)
+                self.simulate_move(board_copy, move, original_player)
+                winner = self.simulate_random_playouts(board_copy, 3 - original_player)
+                if winner == original_player:
+                    move_wins[move] += 1
 
         # Select the move with the highest win count
         best_move = max(range(7), key=lambda m: move_wins[m])
         return best_move
 
     def check_winner(self, board, row, col, player):
-        # Implement win checking logic here, similar to WinChecker but for the board copy
-        pass
+        directions = [(0, 1), (1, 0), (1, 1), (1, -1)]  # Horizontal, Vertical, Diagonal Down, Diagonal Up
+        for d in directions:
+            count = 1  # Include the current token
+            # Check one direction
+            for i in range(1, 4):
+                r = row + d[0] * i
+                c = col + d[1] * i
+                if r < 0 or r >= len(board) or c < 0 or c >= len(board[0]) or board[r][c] != player:
+                    break
+                count += 1
+            # Check the opposite direction
+            for i in range(1, 4):
+                r = row - d[0] * i
+                c = col - d[1] * i
+                if r < 0 or r >= len(board) or c < 0 or c >= len(board[0]) or board[r][c] != player:
+                    break
+                count += 1
+            # Check if player won
+            if count >= 4:
+                return True
+        return False

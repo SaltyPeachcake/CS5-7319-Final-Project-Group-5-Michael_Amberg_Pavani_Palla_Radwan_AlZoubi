@@ -1,5 +1,5 @@
 class AlphaBeta:
-    def __init__(self, blackboard, depth=4):
+    def __init__(self, blackboard, depth=2):
         self.blackboard = blackboard
         self.depth = depth
         self.player_num = blackboard.current_player
@@ -47,41 +47,36 @@ class AlphaBeta:
 
     def heuristic(self, board):
         score = 0
-        colNum = 7
-        rowNum = 6
-        winLen = 4
-        player = 2 # AI will always be player #2
-        opp = 1
+        player = 2  # AI will always be player #2
+        opp = 1  # Opponent
 
         # Score center column
-        center_array = [int(i) for i in list(board[:, 4])] # middle col
+        center_array = [row[3] for row in board]  # Extract the center column values
         center_count = center_array.count(player)
         score += center_count * 3
 
         # Score Horizontal
-        for r in range(rowNum):
-            row_array = [int(i) for i in list(board[r, :])]
-            for c in range(colNum - 3):
-                window = row_array[c:c + winLen]
+        for r in range(6):  # Assuming 6 rows
+            for c in range(7 - 3):  # Allows checking for horizontal sequences within bounds
+                window = [board[r][c + i] for i in range(4)]
                 score += self.evaluate_window(window, player, opp)
 
         # Score Vertical
-        for c in range(colNum):
-            col_array = [int(i) for i in list(board[:, c])]
-            for r in range(rowNum - 3):
-                window = col_array[r:r + winLen]
+        for c in range(7):  # Assuming 7 columns
+            for r in range(6 - 3):  # Allows checking for vertical sequences within bounds
+                window = [board[r + i][c] for i in range(4)]
                 score += self.evaluate_window(window, player, opp)
 
         # Score positive sloped diagonal
-        for r in range(rowNum - 3):
-            for c in range(colNum - 3):
-                window = [board[r + i][c + i] for i in range(winLen)]
+        for r in range(6 - 3):
+            for c in range(7 - 3):
+                window = [board[r + i][c + i] for i in range(4)]
                 score += self.evaluate_window(window, player, opp)
 
         # Score negative sloped diagonal
-        for r in range(rowNum - 3):
-            for c in range(colNum - 3):
-                window = [board[r + 3 - i][c + i] for i in range(winLen)]
+        for r in range(3, 6):
+            for c in range(7 - 3):
+                window = [board[r - i][c + i] for i in range(4)]
                 score += self.evaluate_window(window, player, opp)
 
         return score

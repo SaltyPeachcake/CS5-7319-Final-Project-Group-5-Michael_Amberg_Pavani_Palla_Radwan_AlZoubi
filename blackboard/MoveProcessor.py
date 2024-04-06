@@ -15,12 +15,5 @@ class MoveProcessor:
                 self.blackboard.board[row][column] = self.blackboard.current_player  # Place the current player's token
                 break
 
-        # After making a move, check for a winner or switch turns
-        winner = self.blackboard.check_winner()
-        if winner:
-            print(f"Player {winner} wins!")
-            return True  # This could signal the game loop to end the game
-
-        # If no winner, switch turns
-        self.blackboard.switch_player()
+        #self.blackboard.switch_player()
         return True
