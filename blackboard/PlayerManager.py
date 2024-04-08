@@ -7,6 +7,6 @@ class PlayerManager:
         self.player_tokens = {1: 'red', 2: 'yellow'}
 
     def switch_turns(self):
-        # Switch the current player's turn
-        self.blackboard.switch_player()
+        self.blackboard.current_player = 1 if self.current_player == 2 else 2
+
 

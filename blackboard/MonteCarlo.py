@@ -1,6 +1,7 @@
 import random
 import copy
 
+
 class MonteCarlo:
     def __init__(self, blackboard, simulations_per_move=100):
         self.blackboard = blackboard

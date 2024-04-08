@@ -197,7 +197,7 @@ class Connect4App:
         self.game_board = GameBoard(self.root, self.blackboard, self.start_new_game, self.restart_game, self)
         self.game_board.pack()
         self.start_menu.pack_forget()
-        self.blackboard.set_opponent_type(opponent)
+        self.blackboard.opponent_type = opponent
 
     def show_winner(self, winner):
         # Hide the current game UI
