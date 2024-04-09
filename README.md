@@ -40,7 +40,7 @@ Note that these concurrent scripts are the same as what is located in the unsele
 
 When designing the architecture for our Python-based Connect4 game, we evaluated several architectural styles. Our primary goal was to ensure that the architecture supported modularity, ease of maintenance, scalability, and a clean separation of concerns.
 
-###Blackboard Architecture
+### Blackboard Architecture
 
 The **Blackboard Architecture** was initially considered due to its flexibility in integrating diverse problem-solving modules. This architecture style revolves around a shared knowledge base (the "blackboard") where different components read from and write to. It's particularly well-suited for problems where the solution emerges from the incremental contributions of diverse subsystems. In our case, the gradual process to complete a game using the same board and starting variables allows it to work well with the architecture.
 
@@ -70,4 +70,3 @@ The **C2 Architectural Style** is a component-based architecture designed for ne
 
 ### Implementations
 Ultimately, we decided on the blackboard and C2 style over other architectures due to their ability to integrate well with the system we were developing. By allowing for any number of components to operate separately yet smoothly these architectures seemed to be ideal. The **blackboard style** offers dynamic strategy development, making it ideal for games where AI complexity and adaptability are paramount. Because all components operate off this one set of data, it was easy to develop many different components and pass the same data onto them all. The **C2 Architectural Style** was selected for the second implementation because it focused on modularity, event-driven interactions, and the decoupling of components. C2's hierarchical, message-passing model is ideal for interactive applications like games, where user actions trigger updates to the game state and UI and the overall game process occurs in a hierarchical manner.
-
