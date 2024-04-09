@@ -202,7 +202,7 @@ class Connect4App:
             self.handle_board_click(message.data)
         elif message.type == "MoveProcessed":
             self.switch_logic(message.data)
-        elif message.type == "RestartGame" or message.type == "StartNewGame":
+        elif message.type == "RestartGame":
             self.handle_game_reset()
         elif message.type == "WinnerCheckResult":
             self.handle_winner_check_result(message.data)
@@ -225,24 +225,22 @@ class Connect4App:
         self.connector.publish(Message(self, "ProcessMove", (self.board, column, self.current_player)))
 
     def handle_newgame(self):
-        # Reset game state as necessary
         self.board = [[0 for _ in range(7)] for _ in range(6)]
         self.current_player = 1  # Reset to player 1 starts
         self.opponent_type = None  # Reset opponent type
 
         # Hide game board and winner display, and show start menu
         if self.game_board_component:
-            self.game_board_component.frame.pack_forget()  # Hide the game board
+            self.game_board_component.hide()
         self.winner_display_component.hide()
         self.start_menu_component.show()
-        self.game_board_component.hide()
 
     def ai_move(self, data):
         column = data
         self.connector.publish(Message(self, "ProcessMove", (self.board, column, 2)))
         self.current_player = 1  # Switch back to the human player
-        self.connector.publish(Message(self, "UpdateBoard", self.board))  # Update the board state
-        self.connector.publish(Message(self, "CheckForWinner", self.board))  # Check for a winner
+        self.connector.publish(Message(self, "UpdateBoard", self.board))
+        self.connector.publish(Message(self, "CheckForWinner", self.board))
 
     def switch_logic(self, data):
         column, valid, game = data
