@@ -3,6 +3,7 @@ import random
 import copy
 import threading
 
+
 # NOTE - This is the exact same as the blackboard in the Selected folder. However, all the classes are instead located
 # in one script so that it can be run from the command line
 
@@ -49,7 +50,6 @@ class AlphaBeta:
 
         # If no winner is found
         return None
-
 
     def evaluate_window(self, window, player, opp):
         score = 0
@@ -102,7 +102,8 @@ class AlphaBeta:
     def is_terminal_node(self, board):
         if self.check_winner_ABP(board) is not None:
             return True
-        else: return False
+        else:
+            return False
 
     def get_valid_moves(self, board):
         return [col for col in range(7) if board[0][col] == 0]  # Assuming a column is playable if the top is empty
@@ -278,7 +279,7 @@ class MoveProcessor:
                 self.blackboard.board[row][column] = self.blackboard.current_player  # Place the current player's token
                 break
 
-        #self.blackboard.switch_player()
+        # self.blackboard.switch_player()
         return True
 
 
@@ -416,7 +417,7 @@ class GameBoard(tk.Canvas):
                 elif self.blackboard.board[row][col] == 2:
                     # Player 2's token (red)
                     self.canvas.create_oval(x0 + 10, y0 + 10, x1 - 10, y1 - 10, fill="red", tags="token")
-        #self.player_turn_label = tk.Label(self, text="Player "+str(self.blackboard.current_player)+"'s turn")
+        # self.player_turn_label = tk.Label(self, text="Player "+str(self.blackboard.current_player)+"'s turn")
 
     def on_board_click(self, event):
         if self.blackboard.current_player == 2 and self.blackboard.opponent_type != "Player 2":
@@ -443,7 +444,6 @@ class GameBoard(tk.Canvas):
             self.app_ref.show_winner(won)
         self.update_player_turn_label()
 
-
     def ai_make_move(self):
         if self.blackboard.opponent_type == "Monte Carlo AI":
             MC = MonteCarlo(self.blackboard)
@@ -453,12 +453,12 @@ class GameBoard(tk.Canvas):
             return AB.find_best_move()
         self.update_player_turn_label()
 
-
     def restart_game(self):
         self.restart_game_callback()
 
     def start_new(self):
         self.start_new_game_callback()
+
 
 class WinnerDisplay(tk.Frame):
     def __init__(self, parent, winner, start_new_game_callback, replay_callback):
@@ -511,7 +511,6 @@ class Connect4App:
         self.start_game(self.blackboard.opponent_type)
         if self.winner_display:
             self.winner_display.pack_forget()
-
 
     def start_new_game(self):
         if hasattr(self, 'winner_display') and self.winner_display:
